@@ -1,0 +1,10 @@
+**/node_modules
+**/.next
+**/dist
+**/.git
+**/.local
+**/logs
+**/.env
+**/.env.local
+**/coverage
+apps/api/logs

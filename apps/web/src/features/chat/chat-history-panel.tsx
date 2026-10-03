@@ -59,6 +59,15 @@ export function ChatHistoryPanel() {
   }
 
   const active = withActivity.find((s) => s.id === selectedId) ?? withActivity[0];
+  if (!active) {
+    return (
+      <div className="card empty">
+        <MessagesSquare size={30} className="muted" />
+        <h2 style={{ margin: "14px 0 6px" }}>No conversations yet</h2>
+        <p className="muted">Start chatting from the Book page to build history here.</p>
+      </div>
+    );
+  }
 
   return (
     <div style={{ display: "grid", gap: 14 }}>

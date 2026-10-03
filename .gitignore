@@ -69,9 +69,27 @@ Thumbs.db
 !.vscode/extensions.json
 !.vscode/settings.json.example
 
-# Deploy / cloud
+# Deploy / cloud / private server (not for interview repo)
 .vercel/
 .netlify/
+.fly/
+.render/
+deploy/
+**/docker-compose*.override.yml
+**/Dockerfile.local
+
+# Secrets & credentials (extra safety for shared assessment repo)
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.secret
+secrets/
+credentials/
+**/service-account*.json
+**/firebase-adminsdk*.json
 
 # Prisma / generated (if ever written to repo root)
 prisma/*.db
