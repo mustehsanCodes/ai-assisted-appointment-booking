@@ -1,0 +1,15 @@
+CREATE TYPE "AppointmentStatus" AS ENUM ('CONFIRMED','CANCELLED');
+CREATE TYPE "MessageRole" AS ENUM ('USER','ASSISTANT');
+CREATE TYPE "AiStatus" AS ENUM ('PENDING','COMPLETED','FAILED');
+CREATE TABLE "User" ("id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),"name" VARCHAR(100) NOT NULL,"email" VARCHAR(254) NOT NULL,"passwordHash" TEXT NOT NULL,"createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+CREATE TABLE "Appointment" ("id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),"userId" UUID NOT NULL REFERENCES "User"("id") ON DELETE CASCADE,"serviceCode" VARCHAR(40) NOT NULL,"startsAt" TIMESTAMPTZ(3) NOT NULL,"endsAt" TIMESTAMPTZ(3) NOT NULL,"status" "AppointmentStatus" NOT NULL DEFAULT 'CONFIRMED',"idempotencyKey" VARCHAR(100) NOT NULL,"requestHash" VARCHAR(64) NOT NULL,"createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,CONSTRAINT "Appointment_valid_interval" CHECK ("endsAt">"startsAt"));
+CREATE UNIQUE INDEX "Appointment_userId_idempotencyKey_key" ON "Appointment"("userId","idempotencyKey");
+CREATE UNIQUE INDEX "Appointment_confirmed_startsAt_key" ON "Appointment"("startsAt") WHERE "status"='CONFIRMED';
+CREATE INDEX "Appointment_userId_startsAt_id_idx" ON "Appointment"("userId","startsAt","id");
+CREATE TABLE "ChatSession" ("id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),"userId" UUID NOT NULL REFERENCES "User"("id") ON DELETE CASCADE,"bookingDraft" JSONB NOT NULL DEFAULT '{}',"processingToken" UUID,"processingStartedAt" TIMESTAMPTZ(3),"createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,"updatedAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE INDEX "ChatSession_userId_updatedAt_id_idx" ON "ChatSession"("userId","updatedAt","id");
+CREATE TABLE "ChatMessage" ("id" UUID PRIMARY KEY DEFAULT gen_random_uuid(),"sessionId" UUID NOT NULL REFERENCES "ChatSession"("id") ON DELETE CASCADE,"role" "MessageRole" NOT NULL,"content" VARCHAR(2000) NOT NULL,"clientMessageId" UUID,"aiStatus" "AiStatus" NOT NULL DEFAULT 'COMPLETED',"replyToMessageId" UUID,"createdAt" TIMESTAMPTZ(3) NOT NULL DEFAULT CURRENT_TIMESTAMP);
+CREATE UNIQUE INDEX "ChatMessage_sessionId_clientMessageId_key" ON "ChatMessage"("sessionId","clientMessageId");
+CREATE UNIQUE INDEX "ChatMessage_replyToMessageId_key" ON "ChatMessage"("replyToMessageId");
+CREATE INDEX "ChatMessage_sessionId_createdAt_id_idx" ON "ChatMessage"("sessionId","createdAt","id");

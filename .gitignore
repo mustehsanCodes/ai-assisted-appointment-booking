@@ -1,0 +1,78 @@
+# Dependencies & package managers
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+
+# Local private notes / scratch / guides (not committed)
+.local/
+docs/
+*.local.md
+*-notes.md
+*-scratch.md
+NOTES.md
+TODO.local.md
+drafts/
+scratch/
+COMPLETE-GUIDE.md
+
+# Next.js / editor agent noise
+**/AGENTS.md
+**/CLAUDE.md
+.cursor/
+
+# Local / dump databases (project uses Supabase remotely)
+database/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+*.sqlitedb
+*.dump
+*.sql.bak
+postgres-data/
+pgdata/
+.dump/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Builds & caches
+.next/
+dist/
+build/
+out/
+coverage/
+*.tsbuildinfo
+.turbo/
+.cache/
+
+# Logs
+*.log
+logs/
+apps/*/logs/
+
+# Test / QA artifacts
+playwright-report/
+test-results/
+artifacts/
+tmp/
+.nyc_output/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# Deploy / cloud
+.vercel/
+.netlify/
+
+# Prisma / generated (if ever written to repo root)
+prisma/*.db
+**/dev.db

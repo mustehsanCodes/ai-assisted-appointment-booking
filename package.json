@@ -1,0 +1,19 @@
+{
+  "name": "appointment-assessment",
+  "private": true,
+  "packageManager": "pnpm@10.18.3",
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm --filter @appointment/api test",
+    "lint": "pnpm -r lint",
+    "format": "prettier --write . && pnpm --filter @appointment/api prisma format",
+    "format:check": "prettier --check .",
+    "db:migrate": "pnpm --filter @appointment/api prisma migrate deploy",
+    "db:seed": "pnpm --filter @appointment/api db:seed"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.9"
+  }
+}
